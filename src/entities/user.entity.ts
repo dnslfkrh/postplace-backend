@@ -17,9 +17,6 @@ export class User {
   @Column({ nullable: true })
   picture: string;
 
-  @Column({ nullable: true })
-  accessToken: string;
-
   @CreateDateColumn()
   createdAt: Date;
 }

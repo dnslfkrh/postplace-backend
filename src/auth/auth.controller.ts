@@ -2,17 +2,10 @@ import { Controller, Get, UseGuards, Req, Res, HttpStatus } from '@nestjs/common
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { Request, Response } from 'express';
-import { FRONTEND_URL } from 'src/_configs/env.config';
+import { FRONTEND_URL } from 'src/configs/env.config';
 import { AccessTokenGuard } from './guard/accessToken';
 import { User } from 'src/entities/user.entity';
-
-export interface GoogleUser {
-    email: string;
-    firstName: string;
-    lastName: string;
-    picture: string;
-    accessToken: string;
-}
+import { GoogleUser } from 'src/types/Props';
 
 @Controller('auth')
 export class AuthController {
