@@ -7,31 +7,37 @@ import { UserRepository } from 'src/repositories/user.repository';
 
 @Injectable()
 export class TokenMiddleware implements NestMiddleware {
-  constructor(private readonly userRepository: UserRepository) { }
+  constructor(private readonly userRepository: UserRepository) {}
+
   async use(req: Request, res: Response, next: NextFunction) {
+    console.log('TokenMiddleware 호출됨'); // 미들웨어 시작 로그
 
-    const authHeader = req.headers['authorization'];
-    if (!authHeader) {
-      throw new UserException(UserExceptionCode.USER_UNAUTHORIZED);
-    }
+    const accessToken = req.cookies.accessToken;
+    console.log('AccessToken:', accessToken); // 추가된 로그
 
-    const accessToken = authHeader.split(' ')[1];
     if (!accessToken) {
+      console.log('AccessToken이 없습니다.');
       throw new UserException(UserExceptionCode.USER_UNAUTHORIZED);
     }
+
     try {
-      const decodedToken = jwt.verify(accessToken, JWT_SECRET) as { userID: number; userEmail: string; }
+      console.log('AccessToken 검증 중...');
+      const decodedToken = jwt.verify(accessToken, JWT_SECRET) as { userID: number; userEmail: string; };
+
+      console.log('디코드된 토큰:', decodedToken);
 
       const user = await this.userRepository.findByIDAndEmail(decodedToken.userID, decodedToken.userEmail);
       if (!user) {
+        console.log('사용자를 찾을 수 없습니다.');
         throw new UserException(UserExceptionCode.USER_NOT_FOUND);
       }
 
-      req['user'] = user;
+      req['user'] = user.id;
+      console.log('사용자 ID:', req['user']);
 
       next();
     } catch (error) {
-      console.error(error);
+      console.error('미들웨어 오류:', error);
       throw new UserException(UserExceptionCode.USER_UNAUTHORIZED);
     }
   }

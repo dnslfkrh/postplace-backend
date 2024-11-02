@@ -33,5 +33,10 @@ import { User } from 'src/entities/user.entity';
         UserRepository,
     ],
     controllers: [AuthController],
+    exports: [
+        AuthService,
+        UserRepository,
+    ]
 })
+
 export class AuthModule { }

@@ -7,13 +7,16 @@ export class Article {
     id: number;
 
     @Column()
+    pinId: number;
+
+    @Column()
+    userId: number; // 쿠키 속 사용자
+
+    @Column()
     title: string;
 
     @Column()
     content: string;
-
-    @Column()
-    userId: string; // 쿠키 속 사용자
 
     @CreateDateColumn()
     createdAt: Date;
@@ -23,7 +26,4 @@ export class Article {
 
     @Column({ default: false })
     isUpdated: boolean;
-
-    @OneToOne(() => Pin, (pin) => pin.article)
-    pin: Pin;
 }
