@@ -16,34 +16,27 @@ export class AuthController {
     @Get('google/callback')
     @UseGuards(AuthGuard('google'))
     async googleAuthRedirect(@Req() req: Request & { user: GoogleUser }, @Res() res: Response) {
-        const user = await this.authService.validateUser(req.user);
-        const { accessToken, refreshToken } = await this.authService.generateTokens(user);
+        try {
+            const user = await this.authService.validateUserToJudgmentLoginOrRegister(req.user);
+            
+            const { accessToken, refreshToken } = await this.authService.generateTokens(user);
 
-        res.cookie('accessToken', accessToken, {
-            httpOnly: true,
-            secure: false, /* process.env.NODE_ENV === 'production' */
-            sameSite: 'lax'
-        });
+            res.cookie('accessToken', accessToken, {
+                httpOnly: true,
+                secure: false, /* process.env.NODE_ENV === 'production' */
+                sameSite: 'lax'
+            });
 
-        res.cookie('refreshToken', refreshToken, {
-            httpOnly: true,
-            secure: false, /* process.env.NODE_ENV === 'production' */
-            sameSite: 'lax'
-        });
+            res.cookie('refreshToken', refreshToken, {
+                httpOnly: true,
+                secure: false, /* process.env.NODE_ENV === 'production' */
+                sameSite: 'lax'
+            });
 
-        res.redirect(`${FRONTEND_URL}`);
+            res.redirect(`${FRONTEND_URL}`);
+        } catch (error) {
+            console.error('구글 로그인 에러:', error);
+            res.redirect(`${FRONTEND_URL}/login`);
+        }
     }
-
-    // @Get('isTokenExist')
-    // @UseGuards(AccessTokenGuard)
-    // isTokenExist(@Req() req: Request, @Res() res: Response) {
-    //     const accessToken = req.cookies['accessToken'];
-    //     const refreshToken = req.cookies['refreshToken'];
-
-    //     if (accessToken && refreshToken) {
-    //         return res.status(HttpStatus.OK).json({ message: 'Tokens exist' });
-    //     } else {
-    //         return res.status(HttpStatus.UNAUTHORIZED).json({ message: 'Tokens not found' });
-    //     }
-    // }
 }

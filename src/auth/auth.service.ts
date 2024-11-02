@@ -19,12 +19,12 @@ export class AuthService {
             userID: user.id,
         };
 
-        const accessToken = this.jwtService.sign(payload, {
+        const accessToken = await this.jwtService.sign(payload, {
             secret: JWT_SECRET,
             expiresIn: '60m',
         });
 
-        const refreshToken = this.jwtService.sign(payload, {
+        const refreshToken = await this.jwtService.sign(payload, {
             secret: JWT_REFRESH_SECRET,
             expiresIn: '14d',
         });
@@ -35,10 +35,10 @@ export class AuthService {
         };
     };
 
-    async validateUser(details: Partial<User>): Promise<User> {
+    async validateUserToJudgmentLoginOrRegister(details: Partial<User>): Promise<User> {
         const { id, email } = details;
 
-        if (!details.email) {
+        if (!details.id && !details.email) {
             throw new UserException(UserExceptionCode.USER_BAD_REQUEST);
         }
 
@@ -48,8 +48,8 @@ export class AuthService {
             return user; // 이미 저장된 회원이면 저장 X
         }
 
-        // 가입되지 않은 유저는 저장
         user = await this.userRepository.createUser(details);
+
         return user;
     };
 }
