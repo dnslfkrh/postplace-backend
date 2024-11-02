@@ -11,8 +11,8 @@ export class UserRepository {
     ) { }
 
     // 등록된 회원인지 검사
-    async findByEmail(email: string): Promise<User | undefined> {
-        return this.userRepository.findOne({ where: { email } });
+    async findByIDAndEmail(id: number, email: string): Promise<User | undefined> {
+        return this.userRepository.findOne({ where: { id, email } });
     }
 
     // 사용자 등록

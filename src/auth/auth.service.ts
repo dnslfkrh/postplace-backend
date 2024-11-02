@@ -3,6 +3,7 @@ import { UserRepository } from 'src/repositories/user.repository';
 import { User } from 'src/entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import { JWT_REFRESH_SECRET, JWT_SECRET } from 'src/configs/env.config';
+import { UserException, UserExceptionCode } from 'src/exception/user.exception';
 
 @Injectable()
 export class AuthService {
@@ -14,8 +15,8 @@ export class AuthService {
     async generateTokens(user: User) {
         const payload = {
             // 여기에 넣을 키 추가하기
-            username: user.email,
-            sub: user.id,
+            userEmail: user.email,
+            userID: user.id,
         };
 
         const accessToken = this.jwtService.sign(payload, {
@@ -35,18 +36,19 @@ export class AuthService {
     };
 
     async validateUser(details: Partial<User>): Promise<User> {
-        const { email } = details;
+        const { id, email } = details;
 
-        let user = await this.userRepository.findByEmail(email);
+        if (!details.email) {
+            throw new UserException(UserExceptionCode.USER_BAD_REQUEST);
+        }
+
+        let user = await this.userRepository.findByIDAndEmail(id, email);
 
         if (user) {
             return user; // 이미 저장된 회원이면 저장 X
         }
 
-        if (!details.email || !details.firstName || !details.lastName) {
-            throw new Error('필수 사용자 정보가 누락되었습니다.');
-        }
-
+        // 가입되지 않은 유저는 저장
         user = await this.userRepository.createUser(details);
         return user;
     };

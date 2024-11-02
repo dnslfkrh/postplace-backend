@@ -13,8 +13,8 @@ export const mysqlConfig: TypeOrmModuleOptions = {
     database: DB_DATABASE,
     entities: [
         User,
+        Pin,
         Article,
-        Pin
     ],
 
     // dev only!!
