@@ -1,10 +1,8 @@
-import { Controller, Get, UseGuards, Req, Res, HttpStatus } from '@nestjs/common';
+import { Controller, Get, UseGuards, Req, Res } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { Request, Response } from 'express';
 import { FRONTEND_URL } from 'src/configs/env.config';
-import { AccessTokenGuard } from './guard/accessToken';
-import { User } from 'src/entities/user.entity';
 import { GoogleUser } from 'src/types/Props';
 
 @Controller('auth')
@@ -36,16 +34,16 @@ export class AuthController {
         res.redirect(`${FRONTEND_URL}`);
     }
 
-    @Get('isTokenExist')
-    @UseGuards(AccessTokenGuard)
-    isTokenExist(@Req() req: Request, @Res() res: Response) {
-        const accessToken = req.cookies['accessToken'];
-        const refreshToken = req.cookies['refreshToken'];
+    // @Get('isTokenExist')
+    // @UseGuards(AccessTokenGuard)
+    // isTokenExist(@Req() req: Request, @Res() res: Response) {
+    //     const accessToken = req.cookies['accessToken'];
+    //     const refreshToken = req.cookies['refreshToken'];
 
-        if (accessToken && refreshToken) {
-            return res.status(HttpStatus.OK).json({ message: 'Tokens exist' });
-        } else {
-            return res.status(HttpStatus.UNAUTHORIZED).json({ message: 'Tokens not found' });
-        }
-    }
+    //     if (accessToken && refreshToken) {
+    //         return res.status(HttpStatus.OK).json({ message: 'Tokens exist' });
+    //     } else {
+    //         return res.status(HttpStatus.UNAUTHORIZED).json({ message: 'Tokens not found' });
+    //     }
+    // }
 }

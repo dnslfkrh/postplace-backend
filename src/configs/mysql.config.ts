@@ -1,6 +1,8 @@
 import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
 import { DB_DATABASE, DB_HOST, DB_PASSWORD, DB_PORT, DB_USER } from "./env.config";
 import { User } from "src/entities/user.entity";
+import { Article } from "src/entities/Article.entity";
+import { Pin } from "src/entities/Pin.entity";
 
 export const mysqlConfig: TypeOrmModuleOptions = {
     type: "mysql",
@@ -11,7 +13,8 @@ export const mysqlConfig: TypeOrmModuleOptions = {
     database: DB_DATABASE,
     entities: [
         User,
-        
+        Article,
+        Pin
     ],
 
     // dev only!!
