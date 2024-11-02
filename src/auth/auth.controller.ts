@@ -44,32 +44,4 @@ export class AuthController {
             res.redirect(`${FRONTEND_URL}/login`);
         }
     };
-
-    @Post('refresh')
-    async refresh(@Req() req: Request, @Res() res: Response) {
-        const refreshToken = req.cookies?.refreshToken;
-
-        try {
-            const decodeRefreshToken = await this.authService.verifyRefreshToken(refreshToken);
-
-            const user = await this.userService.getUser(decodeRefreshToken.userID);
-
-            const newAccessToken = await this.authService.regenerateAccessToken(user);
-
-            res.cookie('accessToken', newAccessToken, {
-                httpOnly: true,
-                secure: false, /* process.env.NODE_ENV === 'production' */
-                sameSite: 'lax'
-            });
-
-            return res.status(200).json({
-                accessToken: newAccessToken,
-                message: 'Access token renewed successfully'
-            });
-
-        } catch (error) {
-            console.error('엑세스 토큰 재발급 에러:', error);
-            throw new UserException(UserExceptionCode.TOKEN_EXPIRED);
-        }
-    };
 }
