@@ -40,7 +40,7 @@ export class AuthService {
         let user = await this.userRepository.findByEmail(email);
 
         if (user) {
-            return user;
+            return user; // 이미 저장된 회원이면 저장 X
         }
 
         if (!details.email || !details.firstName || !details.lastName) {
