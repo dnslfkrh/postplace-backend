@@ -4,7 +4,7 @@ import { UserRepository } from 'src/repositories/user.repository';
 @Injectable()
 export class UserService {
     constructor(
-        private readonly userRepository: UserRepository,
+        private userRepository: UserRepository,
     ) { }
 
     async getUser(id: number) {

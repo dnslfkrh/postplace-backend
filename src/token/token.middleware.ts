@@ -17,8 +17,6 @@ export class TokenMiddleware implements NestMiddleware {
     const accessToken = req.cookies.accessToken;
     const refreshToken = req.cookies.refreshToken;
 
-    console.log(accessToken, refreshToken);
-
     if (!accessToken && !refreshToken) {
       res.redirect(`${process.env.FRONTEND_URL}/login`);
     }

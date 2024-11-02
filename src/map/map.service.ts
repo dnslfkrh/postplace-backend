@@ -12,17 +12,9 @@ export class MapService {
     ) { }
 
     async createArticle(user: number, articleData: NewArticleDto) {
-        console.log('articleData:', articleData);
         const pin = await this.pinRepository.createPin({
             latitude: articleData.position.latitude,
             longitude: articleData.position.longitude,
-        });
-
-        console.log('Creating article with:', {
-            user,
-            title: articleData.title,
-            content: articleData.content,
-            pinId: pin.id
         });
 
         return await this.articleRepository.createArticle(
