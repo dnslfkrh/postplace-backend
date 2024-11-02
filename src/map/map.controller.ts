@@ -14,7 +14,6 @@ export class MapController {
         @Body() articleData: NewArticleDto
     ) {
         const user = req['user'];
-        console.log("유저는: ", user);
 
         return await this.mapService.createArticle(user, articleData);
     }

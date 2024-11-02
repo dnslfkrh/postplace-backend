@@ -8,12 +8,15 @@ import { MapService } from './map/map.service';
 import { MapController } from './map/map.controller';
 import { MapModule } from './map/map.module';
 import { TokenMiddleware } from './token/token.middleware';
+import { UserService } from './user/user.service';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(mysqlConfig),
     AuthModule,
     MapModule,
+    UserModule,
   ],
   controllers: [
     AppController,
@@ -23,6 +26,7 @@ import { TokenMiddleware } from './token/token.middleware';
     AppService,
     MapService,
     TokenMiddleware,
+    UserService,
   ],
 })
 

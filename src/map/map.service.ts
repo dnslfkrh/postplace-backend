@@ -9,16 +9,14 @@ export class MapService {
     constructor(
         private pinRepository: PinRepository,
         private articleRepository: ArticleRepository,
-
     ) { }
 
     async createArticle(user: number, articleData: NewArticleDto) {
-        console.log('articleData:', articleData); // 로그 추가
+        console.log('articleData:', articleData);
         const pin = await this.pinRepository.createPin({
-            latitude: articleData.position.latitude, // 올바른 위치 데이터 사용
-            longitude: articleData.position.longitude, // 올바른 위치 데이터 사용
+            latitude: articleData.position.latitude,
+            longitude: articleData.position.longitude,
         });
-
 
         console.log('Creating article with:', {
             user,

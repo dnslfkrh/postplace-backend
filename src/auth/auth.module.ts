@@ -10,7 +10,9 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { UserRepository } from 'src/repositories/user.repository';
 import { User } from 'src/entities/user.entity';
+import { UserModule } from 'src/user/user.module';
 
+// auth.module.ts
 @Module({
     imports: [
         ConfigModule.forRoot(),
@@ -18,25 +20,28 @@ import { User } from 'src/entities/user.entity';
         JwtModule.registerAsync({
             imports: [ConfigModule],
             inject: [ConfigService],
-            useFactory: (configService: ConfigService) => ({
+            useFactory: async (configService: ConfigService) => ({
                 secret: configService.get<string>('JWT_SECRET'),
                 signOptions: { expiresIn: '60m' },
+                // refresh token 설정도 여기에 추가
+                refreshToken: {
+                    secret: configService.get<string>('JWT_REFRESH_SECRET'),
+                    signOptions: { expiresIn: '14d' },
+                },
             }),
         }),
         TypeOrmModule.forFeature([User]),
+        UserModule,
     ],
     providers: [
         AuthService,
         GoogleStrategy,
         AccessTokenStrategy,
         RefreshTokenStrategy,
-        UserRepository,
     ],
     controllers: [AuthController],
     exports: [
         AuthService,
-        UserRepository,
     ]
 })
-
 export class AuthModule { }
