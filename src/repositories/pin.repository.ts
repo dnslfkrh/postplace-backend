@@ -13,6 +13,11 @@ export class PinRepository {
     async createPin(pinData: Partial<Pin>): Promise<Pin> {
         const pin = this.pinRepository.create(pinData);
         return await this.pinRepository.save(pin);
-    }
+    };
 
+    async findAllPins() {
+        const pins = await this.pinRepository.find();
+        console.log(pins);
+        return pins;
+    };
 }

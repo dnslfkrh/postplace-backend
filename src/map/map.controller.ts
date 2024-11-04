@@ -1,8 +1,7 @@
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { MapService } from './map.service';
-import { AccessTokenGuard } from 'src/auth/guard/accessToken';
 import { NewArticleDto } from 'src/dto/article.dto';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 
 @Controller('map')
 export class MapController {
@@ -16,5 +15,10 @@ export class MapController {
         const user = req['user'];
 
         return await this.mapService.createArticle(user, articleData);
+    }
+
+    @Get('get/pins')
+    async getPins( ) {
+        return await this.mapService.readPins();
     }
 }

@@ -23,5 +23,9 @@ export class MapService {
             articleData.content,
             pin.id
         );
-    }
+    };
+
+    async readPins() {
+        return await this.pinRepository.findAllPins();
+    };
 }

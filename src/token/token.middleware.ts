@@ -40,7 +40,7 @@ export class TokenMiddleware implements NestMiddleware {
           sameSite: 'lax'
         });
 
-        decodedToken = jwt.verify(newAccessToken, JWT_SECRET) as { userID: number; userEmail: string };
+        // decodedToken = jwt.verify(newAccessToken, JWT_SECRET) as { userID: number; userEmail: string };
       } else {
         decodedToken = jwt.verify(accessToken, JWT_SECRET) as { userID: number; userEmail: string };
       }
