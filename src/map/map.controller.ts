@@ -18,7 +18,7 @@ export class MapController {
     }
 
     @Get('get/pins')
-    async getPins( ) {
+    async getPins() {
         return await this.mapService.readPins();
     }
 }
