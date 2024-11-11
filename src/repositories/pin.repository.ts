@@ -15,8 +15,25 @@ export class PinRepository {
         return await this.pinRepository.save(pin);
     };
 
-    async findAllPins() {
-        const pins = await this.pinRepository.find();
+    async findPinsInBounds(bounds: {
+        northEast: { latitude: number, longitude: number },
+        southWest: { latitude: number, longitude: number }
+    }
+    ) {
+        const { northEast, southWest } = bounds;
+
+        const pins = await this.pinRepository
+            .createQueryBuilder('pin')
+            .where("pin.latitude BETWEEN :southLat AND :notrhLat", {
+                southLat: southWest.latitude,
+                notrhLat: northEast.latitude
+            })
+            .andWhere("pin.longitude BETWEEN :westLng AND :eastLng", {
+                westLng: southWest.longitude,
+                eastLng: northEast.longitude
+            })
+            .getMany();
+
         console.log(pins);
         return pins;
     };

@@ -25,7 +25,10 @@ export class MapService {
         );
     };
 
-    async readPins() {
-        return await this.pinRepository.findAllPins();
+    async getPins(bounds: {
+        northEast: { latitude: number, longitude: number },
+        southWest: { latitude: number, longitude: number }
+    }) {
+        return await this.pinRepository.findPinsInBounds(bounds);
     };
 }
