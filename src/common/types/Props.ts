@@ -5,6 +5,6 @@ export interface GoogleUserProps {
 };
 
 export interface BoundsProps {
-    northEast: { latitude: number, longitude: number },
-    southWest: { latitude: number, longitude: number }
+    northEast: { latitude: number, longitude: number };
+    southWest: { latitude: number, longitude: number };
 }

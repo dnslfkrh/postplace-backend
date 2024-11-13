@@ -17,8 +17,14 @@ import { User } from 'src/entities/User.entity';
         ArticleRepository,
         PinRepository,
     ],
-    controllers: [MapController],
-    exports: [MapService, PinRepository, ArticleRepository]
+    controllers: [
+        MapController
+    ],
+    exports: [
+        MapService,
+        PinRepository,
+        ArticleRepository
+    ]
 })
 
 export class MapModule { }
