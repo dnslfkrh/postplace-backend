@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 import * as jwt from 'jsonwebtoken';
 import { AuthService } from 'src/modules/auth/auth.service';
 import { JWT_SECRET } from 'src/configs/env.config';
-import { UserException, UserExceptionCode } from 'src/common/exceptions/user.exception';
+import { Exception, ExceptionCode } from 'src/common/exceptions/Exceptions';
 import { UserRepository } from 'src/repositories/user.repository';
 
 @Injectable()
@@ -18,7 +18,7 @@ export class TokenMiddleware implements NestMiddleware {
     const refreshToken = req.cookies.refreshToken;
 
     if (!accessToken && !refreshToken) {
-      res.redirect(`${process.env.FRONTEND_URL}/login`);
+      res.redirect(`${process.env.FRONTEND_URL}/login`);1
     }
 
     try {
@@ -29,7 +29,7 @@ export class TokenMiddleware implements NestMiddleware {
         const user = await this.userRepository.findById(decodedRefreshToken.userID);
 
         if (!user) {
-          throw new UserException(UserExceptionCode.USER_NOT_FOUND);
+          throw new Exception(ExceptionCode.USER_NOT_FOUND);
         }
 
         const newAccessToken = await this.authService.regenerateAccessToken(user);
@@ -47,14 +47,14 @@ export class TokenMiddleware implements NestMiddleware {
 
       const user = await this.userRepository.findByIDAndEmail(decodedToken.userID, decodedToken.userEmail);
       if (!user) {
-        throw new UserException(UserExceptionCode.USER_NOT_FOUND);
+        throw new Exception(ExceptionCode.USER_NOT_FOUND);
       }
 
       req['user'] = user.id;
       next();
     } catch (error) {
       console.error('토큰 미들웨어 오류:', error);
-      throw new UserException(UserExceptionCode.USER_UNAUTHORIZED);
+      throw new Exception(ExceptionCode.INTERNAL_SERVER_ERROR);
     }
   }
 }

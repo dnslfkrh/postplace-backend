@@ -5,7 +5,7 @@ import { Request, Response } from 'express';
 import { FRONTEND_URL } from 'src/configs/env.config';
 import { GoogleUserProps } from 'src/common/types/Props';
 import { UserService } from 'src/modules/user/user.service';
-import { UserException, UserExceptionCode } from 'src/common/exceptions/user.exception';
+import { UserException, UserExceptionCode } from 'src/common/exceptions/Exceptions';
 
 @Controller('auth')
 export class AuthController {

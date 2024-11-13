@@ -2,9 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { UserRepository } from 'src/repositories/user.repository';
 import { User } from 'src/entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
-import jwt from "jsonwebtoken";
 import { JWT_REFRESH_SECRET, JWT_SECRET } from 'src/configs/env.config';
-import { UserException, UserExceptionCode } from 'src/common/exceptions/user.exception';
+import { Exception, ExceptionCode } from 'src/common/exceptions/Exceptions';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
@@ -16,72 +15,98 @@ export class AuthService {
     ) { }
 
     async generateTokens(user: User) {
-        const payload = {
-            // 여기에 넣을 키 추가하기
-            userEmail: user.email,
-            userID: user.id,
-        };
+        try {
+            if (!user) {
+                throw new Exception(ExceptionCode.USER_NOT_FOUND);
+            }
 
-        const accessToken = await this.jwtService.sign(payload, {
-            secret: JWT_SECRET,
-            expiresIn: '60m',
-        });
+            const payload = {
+                userEmail: user.email,
+                userID: user.id,
+            };
 
-        const refreshToken = await this.jwtService.sign(payload, {
-            secret: JWT_REFRESH_SECRET,
-            expiresIn: '14d',
-        });
+            const accessToken = await this.jwtService.sign(payload, {
+                secret: JWT_SECRET,
+                expiresIn: '60m',
+            });
 
-        return {
-            accessToken,
-            refreshToken,
-        };
+            const refreshToken = await this.jwtService.sign(payload, {
+                secret: JWT_REFRESH_SECRET,
+                expiresIn: '14d',
+            });
+
+            return {
+                accessToken,
+                refreshToken,
+            };
+
+        } catch (error) {
+            console.error('서버 오류:', error);
+            throw new Exception(ExceptionCode.INTERNAL_SERVER_ERROR);
+        }
     };
 
     async verifyRefreshToken(refreshToken: string) {
-        if (!refreshToken) {
-            throw new Error('Refresh token is not provided');
-        }
         try {
+            if (!refreshToken) {
+                throw new Exception(ExceptionCode.USER_UNAUTHORIZED);
+            }
+
             return await this.jwtService.verify(refreshToken, {
                 secret: this.configService.get<string>('JWT_REFRESH_SECRET')
             }) as { userID: number; userEmail: string; };
+
         } catch (error) {
-            console.error('Error verifying refresh token:', error);
-            throw new UserException(UserExceptionCode.TOKEN_EXPIRED);
+            console.error('서버 오류:', error);
+            throw new Exception(ExceptionCode.INTERNAL_SERVER_ERROR);
         }
     };
 
     async regenerateAccessToken(user: User) {
-        const payload = {
-            userEmail: user.email,
-            userID: user.id,
-        };
+        try {
+            if (!user) {
+                throw new Exception(ExceptionCode.USER_NOT_FOUND);
+            }
 
-        const newAccessToken = await this.jwtService.sign(payload, {
-            secret: JWT_SECRET,
-            expiresIn: '60m',
-        });
+            const payload = {
+                userEmail: user.email,
+                userID: user.id,
+            };
 
-        return newAccessToken;
+            const newAccessToken = await this.jwtService.sign(payload, {
+                secret: JWT_SECRET,
+                expiresIn: '60m',
+            });
+
+            return newAccessToken;
+
+        } catch (error) {
+            console.error('서버 오류:', error);
+            throw new Exception(ExceptionCode.INTERNAL_SERVER_ERROR);
+        }
     };
 
-
     async validateUserToJudgmentLoginOrRegister(details: Partial<User>): Promise<User> {
-        const { id, email } = details;
+        try {
+            const { id, email } = details;
 
-        if (!details.id && !details.email) {
-            throw new UserException(UserExceptionCode.USER_BAD_REQUEST);
+            if (!details.id && !details.email) {
+                throw new Exception(ExceptionCode.BAD_REQUEST);
+            }
+
+            let user = await this.userRepository.findByIDAndEmail(id, email);
+
+            if (user) {
+                return user; // 이미 저장된 회원이면 저장 X
+            }
+
+            user = await this.userRepository.createUser(details);
+
+            return user;
+
+        } catch (error) {
+            console.error('서버 오류:', error);
+            throw new Exception(ExceptionCode.INTERNAL_SERVER_ERROR);
         }
-
-        let user = await this.userRepository.findByIDAndEmail(id, email);
-
-        if (user) {
-            return user; // 이미 저장된 회원이면 저장 X
-        }
-
-        user = await this.userRepository.createUser(details);
-
-        return user;
     };
 }
