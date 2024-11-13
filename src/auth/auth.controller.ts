@@ -3,7 +3,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { Request, Response } from 'express';
 import { FRONTEND_URL } from 'src/configs/env.config';
-import { GoogleUser } from 'src/types/Props';
+import { GoogleUserProps } from 'src/types/Props';
 import { UserService } from 'src/user/user.service';
 import { UserException, UserExceptionCode } from 'src/exception/user.exception';
 
@@ -20,7 +20,7 @@ export class AuthController {
 
     @Get('google/callback')
     @UseGuards(AuthGuard('google'))
-    async googleAuthRedirect(@Req() req: Request & { user: GoogleUser }, @Res() res: Response) {
+    async googleAuthRedirect(@Req() req: Request & { user: GoogleUserProps }, @Res() res: Response) {
         try {
             const user = await this.authService.validateUserToJudgmentLoginOrRegister(req.user);
 

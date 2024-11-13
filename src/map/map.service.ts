@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { NewArticleDto } from 'src/dto/article.dto';
+import { Pin } from 'src/entities/Pin.entity';
 import { ArticleRepository } from 'src/repositories/article.repository';
 import { PinRepository } from 'src/repositories/pin.repository';
+import { BoundsProps } from 'src/types/Props';
 
 @Injectable()
 export class MapService {
@@ -25,10 +27,7 @@ export class MapService {
         );
     };
 
-    async getPins(bounds: {
-        northEast: { latitude: number, longitude: number },
-        southWest: { latitude: number, longitude: number }
-    }) {
+    async getPins(bounds: BoundsProps): Promise<Pin[]> {
         return await this.pinRepository.findPinsInBounds(bounds);
     };
 }

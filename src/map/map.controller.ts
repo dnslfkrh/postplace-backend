@@ -2,6 +2,7 @@ import { Body, Controller, Get, Post, Query, Req, Res, UseGuards } from '@nestjs
 import { MapService } from './map.service';
 import { NewArticleDto } from 'src/dto/article.dto';
 import { Request, Response } from 'express';
+import { BoundsProps } from 'src/types/Props';
 
 @Controller('map')
 export class MapController {
@@ -24,7 +25,7 @@ export class MapController {
         @Query('swLat') swLat: number,
         @Query('swLng') swLng: number
     ) {
-        const bounds = {
+        const bounds: BoundsProps = {
             northEast: { latitude: Number(neLat), longitude: Number(neLng) },
             southWest: { latitude: Number(swLat), longitude: Number(swLng) }
         };
