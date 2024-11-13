@@ -1,8 +1,8 @@
 import { Body, Controller, Get, Post, Query, Req, Res, UseGuards } from '@nestjs/common';
 import { MapService } from './map.service';
-import { NewArticleDto } from 'src/dto/article.dto';
+import { NewArticleDto } from 'src/modules/map/dto/article.dto';
 import { Request, Response } from 'express';
-import { BoundsProps } from 'src/types/Props';
+import { BoundsProps } from 'src/common/types/Props';
 
 @Controller('map')
 export class MapController {

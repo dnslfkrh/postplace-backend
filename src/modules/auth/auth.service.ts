@@ -4,7 +4,7 @@ import { User } from 'src/entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import jwt from "jsonwebtoken";
 import { JWT_REFRESH_SECRET, JWT_SECRET } from 'src/configs/env.config';
-import { UserException, UserExceptionCode } from 'src/exception/user.exception';
+import { UserException, UserExceptionCode } from 'src/common/exceptions/user.exception';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()

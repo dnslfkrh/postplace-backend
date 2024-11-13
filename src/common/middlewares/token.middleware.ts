@@ -1,9 +1,9 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
 import * as jwt from 'jsonwebtoken';
-import { AuthService } from 'src/auth/auth.service';
+import { AuthService } from 'src/modules/auth/auth.service';
 import { JWT_SECRET } from 'src/configs/env.config';
-import { UserException, UserExceptionCode } from 'src/exception/user.exception';
+import { UserException, UserExceptionCode } from 'src/common/exceptions/user.exception';
 import { UserRepository } from 'src/repositories/user.repository';
 
 @Injectable()

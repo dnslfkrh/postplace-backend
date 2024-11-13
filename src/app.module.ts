@@ -1,15 +1,15 @@
 import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './modules/auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { mysqlConfig } from './configs/mysql.config';
-import { MapService } from './map/map.service';
-import { MapController } from './map/map.controller';
-import { MapModule } from './map/map.module';
-import { TokenMiddleware } from './token/token.middleware';
-import { UserService } from './user/user.service';
-import { UserModule } from './user/user.module';
+import { MapService } from './modules/map/map.service';
+import { MapController } from './modules/map/map.controller';
+import { MapModule } from './modules/map/map.module';
+import { TokenMiddleware } from './common/middlewares/token.middleware';
+import { UserService } from './modules/user/user.service';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [

@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Pin } from "src/entities/Pin.entity";
-import { BoundsProps } from "src/types/Props";
+import { BoundsProps } from "src/common/types/Props";
 import { Repository } from "typeorm";
 
 @Injectable()
