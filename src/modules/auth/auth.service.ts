@@ -75,7 +75,7 @@ export class AuthService {
 
             const newAccessToken = await this.jwtService.sign(payload, {
                 secret: JWT_SECRET,
-                expiresIn: '1m',
+                expiresIn: '120m',
             });
 
             return newAccessToken;
