@@ -5,6 +5,7 @@ import { Request, Response } from 'express';
 import { FRONTEND_URL } from 'src/configs/env.config';
 import { GoogleUserProps } from 'src/common/types/Props';
 import { UserService } from 'src/modules/user/user.service';
+import { resCookie } from 'src/common/utils/resCookie';
 
 @Controller('auth')
 export class AuthController {
@@ -25,17 +26,8 @@ export class AuthController {
 
             const { accessToken, refreshToken } = await this.authService.generateTokens(user);
 
-            res.cookie('accessToken', accessToken, {
-                httpOnly: true,
-                secure: false, /* process.env.NODE_ENV === 'production' */
-                sameSite: 'lax'
-            });
-
-            res.cookie('refreshToken', refreshToken, {
-                httpOnly: true,
-                secure: false, /* process.env.NODE_ENV === 'production' */
-                sameSite: 'lax'
-            });
+            resCookie(res, 'accessToken', accessToken);
+            resCookie(res, 'refreshToken', refreshToken);
 
             res.redirect(`${FRONTEND_URL}`);
         } catch (error) {

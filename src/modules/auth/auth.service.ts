@@ -16,7 +16,7 @@ export class AuthService {
 
     async generateTokens(user: User) {
         try {
-            if (!user) {
+;            if (!user) {
                 throw new Exception(ExceptionCode.USER_NOT_FOUND);
             }
 
@@ -27,7 +27,7 @@ export class AuthService {
 
             const accessToken = await this.jwtService.sign(payload, {
                 secret: JWT_SECRET,
-                expiresIn: '60m',
+                expiresIn: '120m',
             });
 
             const refreshToken = await this.jwtService.sign(payload, {
@@ -75,7 +75,7 @@ export class AuthService {
 
             const newAccessToken = await this.jwtService.sign(payload, {
                 secret: JWT_SECRET,
-                expiresIn: '60m',
+                expiresIn: '1m',
             });
 
             return newAccessToken;
