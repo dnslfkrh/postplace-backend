@@ -18,6 +18,6 @@ export const mysqlConfig: TypeOrmModuleOptions = {
         Article,
     ],
     // dev only!!
-    dropSchema: true, // *실행할 때 디비 초기화*
+    // dropSchema: true, // 그냥 쓰지마라
     synchronize: true,
 }

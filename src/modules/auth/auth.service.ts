@@ -16,7 +16,7 @@ export class AuthService {
 
     async generateTokens(user: User) {
         try {
-;            if (!user) {
+            if (!user) {
                 throw new Exception(ExceptionCode.USER_NOT_FOUND);
             }
 
