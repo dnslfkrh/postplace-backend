@@ -85,28 +85,4 @@ export class AuthService {
             throw new Exception(ExceptionCode.INTERNAL_SERVER_ERROR);
         }
     };
-
-    async validateUserToJudgmentLoginOrRegister(details: Partial<User>): Promise<User> {
-        try {
-            const { id, email } = details;
-
-            if (!details.id && !details.email) {
-                throw new Exception(ExceptionCode.BAD_REQUEST);
-            }
-
-            let user = await this.userRepository.findByIDAndEmail(id, email);
-
-            if (user) {
-                return user; // 이미 저장된 회원이면 저장 X
-            }
-
-            user = await this.userRepository.createUser(details);
-
-            return user;
-
-        } catch (error) {
-            console.error('서버 오류:', error);
-            throw new Exception(ExceptionCode.INTERNAL_SERVER_ERROR);
-        }
-    };
 }

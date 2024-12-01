@@ -10,18 +10,13 @@ export class UserRepository {
         private readonly userRepository: Repository<User>,
     ) { }
 
-    // 등록된 회원인지 검사
     async findByIDAndEmail(id: number, email: string): Promise<User | undefined> {
-        return this.userRepository.findOne({ where: { id, email } });
-    };
-
-    async findById(id: number): Promise<User | undefined> {
-        return this.userRepository.findOne({ where: { id } });
+        return await this.userRepository.findOne({ where: { id, email } });
     };
 
     // 사용자 등록
     async createUser(details: Partial<User>): Promise<User> {
         const user = this.userRepository.create(details);
-        return this.userRepository.save(user);
+        return await this.userRepository.save(user);
     };
 }
