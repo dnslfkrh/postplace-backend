@@ -4,14 +4,12 @@ import { AuthService } from './auth.service';
 import { Request, Response } from 'express';
 import { FRONTEND_URL } from 'src/configs/env.config';
 import { GoogleUserProps } from 'src/common/types/Props';
-import { UserService } from 'src/modules/user/user.service';
 import { resCookie } from 'src/common/utils/resCookie';
 
 @Controller('auth')
 export class AuthController {
     constructor(
         private readonly authService: AuthService,
-        private readonly userService: UserService
     ) { }
 
     @Get('google')

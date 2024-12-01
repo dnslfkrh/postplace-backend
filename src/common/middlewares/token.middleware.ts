@@ -18,6 +18,11 @@ export class TokenMiddleware implements NestMiddleware {
         const accessToken = req.cookies.accessToken;
         const refreshToken = req.cookies.refreshToken;
 
+        // refresh 토큰은 없으면 안됨
+        if (!refreshToken) {
+            throw new Exception(ExceptionCode.USER_UNAUTHORIZED);
+        }
+
         let decodedToken;
 
         const setNewAccessToken = async () => {
@@ -28,7 +33,7 @@ export class TokenMiddleware implements NestMiddleware {
             }
 
             const user = await this.userRepository.findById(decodedRefreshToken.userID);
-            
+
             if (!user) {
                 throw new Exception(ExceptionCode.USER_NOT_FOUND);
             }
@@ -39,19 +44,15 @@ export class TokenMiddleware implements NestMiddleware {
             decodedToken = jwt.verify(newAccessToken, JWT_SECRET) as { userID: number; userEmail: string };
         };
 
-        if (!refreshToken) {
-            throw new Exception(ExceptionCode.USER_UNAUTHORIZED);
-        }
-
         try {
-            if (!accessToken) {
-                await setNewAccessToken();
+            if (!accessToken) {             // access token 없으면
+                await setNewAccessToken();  // 재발급
             } else {
                 try {
-                    decodedToken = jwt.verify(accessToken, JWT_SECRET) as { userID: number; userEmail: string };
-                } catch (error) {
+                    decodedToken = jwt.verify(accessToken, JWT_SECRET) as { userID: number; userEmail: string };    // 있으면 토큰 검증
+                } catch (error) {                                                                                   // 만료되었으면,
                     if (error instanceof jwt.TokenExpiredError) {
-                        await setNewAccessToken();
+                        await setNewAccessToken();                                                                  // 재발급
                     } else {
                         throw new Exception(ExceptionCode.VALIDATION_FAILED);
                     }
@@ -62,13 +63,13 @@ export class TokenMiddleware implements NestMiddleware {
                 throw new Exception(ExceptionCode.USER_UNAUTHORIZED);
             }
 
-            const user = await this.userRepository.findByIDAndEmail(decodedToken.userID, decodedToken.userEmail);
+            const user = await this.userRepository.findByIDAndEmail(decodedToken.userID, decodedToken.userEmail);   // 사용자 최종 검증
 
             if (!user) {
-                throw new Exception(ExceptionCode.USER_NOT_FOUND);
+                throw new Exception(ExceptionCode.USER_NOT_FOUND);                                                  // 검증되지 않은 사용자 또는 없는 사용자
             }
 
-            req['user'] = user.id;
+            req['user'] = user.id;                                                                                  // 사용자 정보 기억
 
             next();
         } catch (error) {
