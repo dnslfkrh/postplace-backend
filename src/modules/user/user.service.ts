@@ -30,7 +30,7 @@ export class UserService {
             console.error('서버 오류:', error);
             throw new Exception(ExceptionCode.INTERNAL_SERVER_ERROR);
         }
-    };
+    }
 
     async findUserWithIdAndEmail(id: number, email: string): Promise<User | undefined> {
         const user = await this.userRepository.findByIDAndEmail(id, email);
@@ -40,5 +40,5 @@ export class UserService {
         }
 
         return user;
-    };
+    }
 }

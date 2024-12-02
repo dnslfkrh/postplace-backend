@@ -12,31 +12,31 @@ import { UserService } from './modules/user/user.service';
 import { UserModule } from './modules/user/user.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forRoot(mysqlConfig),
-    AuthModule,
-    MapModule,
-    UserModule,
-  ],
-  controllers: [
-    AppController,
-    MapController,
-  ],
-  providers: [
-    AppService,
-    MapService,
-    TokenMiddleware,
-    UserService,
-  ],
+    imports: [
+        TypeOrmModule.forRoot(mysqlConfig),
+        AuthModule,
+        MapModule,
+        UserModule,
+    ],
+    controllers: [
+        AppController,
+        MapController,
+    ],
+    providers: [
+        AppService,
+        MapService,
+        TokenMiddleware,
+        UserService,
+    ],
 })
 
 export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(TokenMiddleware)
-      .exclude(
-        { path: 'auth/(.*)', method: RequestMethod.ALL }
-      )
-      .forRoutes('*'); // 모든 경로 적용
-  }
+    configure(consumer: MiddlewareConsumer) {
+        consumer
+            .apply(TokenMiddleware)
+            .exclude(
+                { path: 'auth/(.*)', method: RequestMethod.ALL }
+            )
+            .forRoutes('*'); // 모든 경로 적용
+    }
 }

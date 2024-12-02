@@ -11,11 +11,11 @@ export class PinRepository {
         private readonly pinRepository: Repository<Pin>,
     ) { }
 
-    async createPin(pinData: Partial<Pin>): Promise<Pin> { // Partial<Pin> Pin 타입의 선택적인 속성을 가진 객체 의미
+    async createPin(pinData: Partial<Pin>): Promise<Pin> {
         const pinEntity = this.pinRepository.create(pinData);
         
         return await this.pinRepository.save(pinEntity);
-    };
+    }
 
     async findPinsInBounds(bounds: BoundsProps): Promise<Pin[]> {
         const { northEast, southWest } = bounds;
@@ -31,5 +31,5 @@ export class PinRepository {
                 westLng: southWest.longitude
             })
             .getMany();
-    };
+    }
 }

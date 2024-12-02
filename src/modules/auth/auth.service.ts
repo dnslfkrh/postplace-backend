@@ -44,7 +44,7 @@ export class AuthService {
             console.error('서버 오류:', error);
             throw new Exception(ExceptionCode.INTERNAL_SERVER_ERROR);
         }
-    };
+    }
 
     async verifyRefreshToken(refreshToken: string) {
         try {
@@ -60,7 +60,7 @@ export class AuthService {
             console.error('서버 오류:', error);
             throw new Exception(ExceptionCode.INTERNAL_SERVER_ERROR);
         }
-    };
+    }
 
     async regenerateAccessToken(user: User) {
         try {
@@ -84,5 +84,5 @@ export class AuthService {
             console.error('서버 오류:', error);
             throw new Exception(ExceptionCode.INTERNAL_SERVER_ERROR);
         }
-    };
+    }
 }

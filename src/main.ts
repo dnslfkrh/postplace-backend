@@ -5,20 +5,20 @@ import * as cookieParser from 'cookie-parser';
 import { UserExceptionFilter } from './common/filters/globalException.filter';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+    const app = await NestFactory.create(AppModule);
 
-  app.enableCors({
-    origin: FRONTEND_URL,
-    credentials: true,
-  });
+    app.enableCors({
+        origin: FRONTEND_URL,
+        credentials: true,
+    });
 
-  app.use(cookieParser());
+    app.use(cookieParser());
 
-  app.useGlobalFilters(
-    new UserExceptionFilter(),
-  );
+    app.useGlobalFilters(
+        new UserExceptionFilter(),
+    );
 
-  await app.listen(PORT);
+    await app.listen(PORT);
 }
 
 bootstrap();

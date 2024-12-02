@@ -30,5 +30,5 @@ export class AuthController {
             console.error('구글 로그인 에러:', error);
             res.redirect(`${FRONTEND_URL}/login`);
         }
-    };
+    }
 }

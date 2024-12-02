@@ -8,4 +8,4 @@ export class pinPositionDto {
     @IsNumber()
     @IsNotEmpty()
     lng: number;
-};
+}

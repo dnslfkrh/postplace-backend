@@ -25,9 +25,9 @@ export class MapService {
             articleData.content,
             pin.id
         );
-    };
+    }
 
     async getPins(bounds: BoundsProps): Promise<Pin[]> {
         return await this.pinRepository.findPinsInBounds(bounds);
-    };
+    }
 }

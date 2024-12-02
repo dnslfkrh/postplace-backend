@@ -7,9 +7,9 @@ export interface GoogleUserProps {
 export interface BoundsProps {
     northEast: { latitude: number, longitude: number };
     southWest: { latitude: number, longitude: number };
-}
+};
 
 export interface TokenPayload {
     userID: number;
     userEmail: string;
-}
+};

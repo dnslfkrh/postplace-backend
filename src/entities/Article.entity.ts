@@ -10,7 +10,7 @@ export class Article {
     pinId: number;
 
     @Column()
-    userId: number; // 쿠키 속 사용자
+    userId: number;
 
     @Column()
     title: string;
