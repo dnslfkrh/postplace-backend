@@ -19,8 +19,11 @@ export class TokenMiddleware implements NestMiddleware {
         try {
             const tokens = this.extractTokens(req);
             const decodedToken = await this.processTokens(tokens, res);
-
-            req['user'] = decodedToken.userID;
+    
+            if (decodedToken) {
+                req['user'] = decodedToken.userID;
+            }
+            
             next();
         } catch (error) {
             this.handleTokenError(error);
@@ -30,40 +33,57 @@ export class TokenMiddleware implements NestMiddleware {
     private extractTokens(req: Request): { accessToken?: string; refreshToken?: string } {
         const { accessToken, refreshToken } = req.cookies;
 
-        if (!refreshToken) {
-            throw new Exception(ExceptionCode.USER_UNAUTHORIZED);
-        }
-
         return { accessToken, refreshToken };
     }
 
     private async processTokens(
         { accessToken, refreshToken }: { accessToken?: string; refreshToken?: string }, res: Response
-    ): Promise<TokenPayload> {
+    ): Promise<TokenPayload | null> {
+        if (!accessToken && !refreshToken) {
+            return null;
+        }
+    
         let decodedToken: TokenPayload;
-
+    
         if (!accessToken) {
-            // access token 없으면 재발급
-            decodedToken = await this.regenerateTokens(refreshToken, res);
+            if (!refreshToken) {
+                return null;
+            }
+            
+            try {
+                decodedToken = await this.regenerateTokens(refreshToken, res);
+            } catch {
+                return null;
+            }
         } else {
             try {
-                // 기존 access token 검증
                 decodedToken = this.verifyAccessToken(accessToken);
-                // 만료되지 않았으면 통과~
             } catch (error) {
-                // 만료된 경우 재발급
                 if (error instanceof jwt.TokenExpiredError) {
-                    decodedToken = await this.regenerateTokens(refreshToken, res);
+                    if (!refreshToken) {
+                        return null;
+                    }
+                    
+                    try {
+                        decodedToken = await this.regenerateTokens(refreshToken, res);
+                    } catch {
+                        return null;
+                    }
                 } else {
                     throw new Exception(ExceptionCode.VALIDATION_FAILED);
                 }
             }
         }
-
-        await this.validateUser(decodedToken);
-
+    
+        try {
+            await this.validateUser(decodedToken);
+        } catch {
+            return null;
+        }
+    
         return decodedToken;
     }
+    
 
     private verifyAccessToken(accessToken: string): TokenPayload {
         return jwt.verify(accessToken, JWT_SECRET) as TokenPayload;

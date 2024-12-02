@@ -11,21 +11,21 @@ export class UserService {
 
     async validateUserToJudgmentLoginOrRegister(details: Partial<User>): Promise<User> {
         try {
-            const { id, email } = details;
+            const { email } = details;
 
             if (!details.id && !details.email) {
                 throw new Exception(ExceptionCode.BAD_REQUEST);
             }
 
-            let user = await this.findUserWithIdAndEmail(id, email);
+            const user = await this.userRepository.findByEmail(email);
 
             if (user) {
                 return user; // 이미 저장된 회원이면 저장 X
             }
 
-            user = await this.userRepository.createUser(details);
+            const newUser = await this.userRepository.createUser(details);
 
-            return user;
+            return newUser;
         } catch (error) {
             console.error('서버 오류:', error);
             throw new Exception(ExceptionCode.INTERNAL_SERVER_ERROR);

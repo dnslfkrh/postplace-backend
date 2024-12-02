@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Pin } from "src/entities/Pin.entity";
 import { BoundsProps } from "src/common/types/Props";
-import { Repository } from "typeorm";
+import { Between, Repository } from "typeorm";
 
 @Injectable()
 export class PinRepository {
@@ -11,25 +11,19 @@ export class PinRepository {
         private readonly pinRepository: Repository<Pin>,
     ) { }
 
-    async createPin(pinData: Partial<Pin>): Promise<Pin> {
+    async createPin(pinData: Partial<Pin>): Promise<Pin> { // Partial은 일부만 만족 가능
         const pinEntity = this.pinRepository.create(pinData);
         
         return await this.pinRepository.save(pinEntity);
     }
 
     async findPinsInBounds(bounds: BoundsProps): Promise<Pin[]> {
-        const { northEast, southWest } = bounds;
-
-        return await this.pinRepository
-            .createQueryBuilder('pin')
-            .where("pin.latitude BETWEEN :southLat AND :notrhLat", {
-                notrhLat: northEast.latitude,
-                southLat: southWest.latitude
-            })
-            .andWhere("pin.longitude BETWEEN :westLng AND :eastLng", {
-                eastLng: northEast.longitude,
-                westLng: southWest.longitude
-            })
-            .getMany();
+        return await this.pinRepository.find({
+            where: {
+                latitude: Between(bounds.southWest.latitude, bounds.northEast.latitude),
+                longitude: Between(bounds.southWest.longitude, bounds.northEast.longitude),
+            },
+            select: ['id', 'latitude', 'longitude', 'title', 'content', 'createdAt']
+        });
     }
 }

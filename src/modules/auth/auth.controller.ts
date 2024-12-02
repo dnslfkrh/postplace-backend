@@ -31,4 +31,8 @@ export class AuthController {
             res.redirect(`${FRONTEND_URL}/login`);
         }
     }
+
+    @Get('google')
+    @UseGuards(AuthGuard('google'))
+    async googleAuth(@Req() req: Request) { }
 }
