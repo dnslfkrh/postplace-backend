@@ -14,20 +14,13 @@ export class MapService {
     ) { }
 
     async createArticle(user: number, articleData: NewArticleDto) {
-        const pin = await this.pinRepository.createPin({
+        return await this.pinRepository.createPin({
             userId: user,
             latitude: articleData.position.latitude,
             longitude: articleData.position.longitude,
             title: articleData.title,
             content: articleData.content
         });
-
-        return await this.articleRepository.createArticle(
-            user,
-            articleData.title,
-            articleData.content,
-            pin.id
-        );
     }
 
     async getPins(bounds: BoundsProps): Promise<Pin[]> {

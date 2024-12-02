@@ -18,6 +18,6 @@ export const mysqlConfig: TypeOrmModuleOptions = {
         Article,
     ],
     // dev only!!
-    dropSchema: true, // 그냥 쓰지마라
+    // dropSchema: true, // 그냥 쓰지마라
     synchronize: true,
 }

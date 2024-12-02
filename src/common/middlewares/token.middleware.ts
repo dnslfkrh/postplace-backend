@@ -19,11 +19,10 @@ export class TokenMiddleware implements NestMiddleware {
         try {
             const tokens = this.extractTokens(req);
             const decodedToken = await this.processTokens(tokens, res);
-    
-            if (decodedToken) {
-                req['user'] = decodedToken.userID;
-            }
-            
+
+            console.log(decodedToken.userID, decodedToken.userEmail);
+            req['user'] = decodedToken.userID;
+
             next();
         } catch (error) {
             this.handleTokenError(error);
@@ -42,14 +41,14 @@ export class TokenMiddleware implements NestMiddleware {
         if (!accessToken && !refreshToken) {
             return null;
         }
-    
+
         let decodedToken: TokenPayload;
-    
+
         if (!accessToken) {
             if (!refreshToken) {
                 return null;
             }
-            
+
             try {
                 decodedToken = await this.regenerateTokens(refreshToken, res);
             } catch {
@@ -63,7 +62,7 @@ export class TokenMiddleware implements NestMiddleware {
                     if (!refreshToken) {
                         return null;
                     }
-                    
+
                     try {
                         decodedToken = await this.regenerateTokens(refreshToken, res);
                     } catch {
@@ -74,16 +73,16 @@ export class TokenMiddleware implements NestMiddleware {
                 }
             }
         }
-    
+
         try {
             await this.validateUser(decodedToken);
         } catch {
             return null;
         }
-    
+
         return decodedToken;
     }
-    
+
 
     private verifyAccessToken(accessToken: string): TokenPayload {
         return jwt.verify(accessToken, JWT_SECRET) as TokenPayload;
