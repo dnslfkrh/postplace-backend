@@ -23,7 +23,7 @@ export class PinRepository {
                 latitude: Between(bounds.southWest.latitude, bounds.northEast.latitude),
                 longitude: Between(bounds.southWest.longitude, bounds.northEast.longitude),
             },
-            select: ['id', 'latitude', 'longitude', 'title', 'content', 'createdAt']
+            select: ['id', 'latitude', 'longitude', 'userId', 'title', 'content', 'createdAt']
         });
     }
 }

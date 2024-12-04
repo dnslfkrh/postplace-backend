@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UserRepository } from 'src/repositories/user.repository';
-import { User } from 'src/entities/user.entity';
+import { User } from 'src/entities/User.entity';
 import { JwtService } from '@nestjs/jwt';
 import { JWT_REFRESH_SECRET, JWT_SECRET } from 'src/configs/env.config';
 import { Exception, ExceptionCode } from 'src/common/exceptions/Exceptions';
@@ -35,10 +35,7 @@ export class AuthService {
                 expiresIn: '14d',
             });
 
-            return {
-                accessToken,
-                refreshToken,
-            };
+            return { accessToken, refreshToken };
 
         } catch (error) {
             console.error('서버 오류:', error);
@@ -79,7 +76,6 @@ export class AuthService {
             });
 
             return newAccessToken;
-
         } catch (error) {
             console.error('서버 오류:', error);
             throw new Exception(ExceptionCode.INTERNAL_SERVER_ERROR);

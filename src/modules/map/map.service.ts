@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { NewArticleDto } from 'src/modules/map/dto/article.dto';
 import { Pin } from 'src/entities/Pin.entity';
-import { ArticleRepository } from 'src/repositories/article.repository';
 import { PinRepository } from 'src/repositories/pin.repository';
 import { BoundsProps } from 'src/common/types/Props';
 
@@ -10,7 +9,6 @@ import { BoundsProps } from 'src/common/types/Props';
 export class MapService {
     constructor(
         private pinRepository: PinRepository,
-        private articleRepository: ArticleRepository,
     ) { }
 
     async createArticle(user: number, articleData: NewArticleDto) {

@@ -1,7 +1,6 @@
-import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
+import { TypeOrmModuleOptions } from "@nestjs/typeorm";
 import { DB_DATABASE, DB_HOST, DB_PASSWORD, DB_PORT, DB_USER } from "./env.config";
-import { User } from "src/entities/user.entity";
-import { Article } from "src/entities/Article.entity";
+import { User } from "src/entities/User.entity";
 import { Pin } from "src/entities/Pin.entity";
 
 export const mysqlConfig: TypeOrmModuleOptions = {
@@ -15,7 +14,6 @@ export const mysqlConfig: TypeOrmModuleOptions = {
     entities: [
         User,
         Pin,
-        Article,
     ],
     // dev only!!
     // dropSchema: true, // 그냥 쓰지마라
