@@ -8,7 +8,7 @@ import { AccessTokenStrategy } from './strategy/accessToken.strategy';
 import { RefreshTokenStrategy } from './strategy/refreshToken.strategy';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { User } from 'src/entities/user.entity';
+import { User } from 'src/entities/User.entity';
 import { UserModule } from 'src/modules/user/user.module';
 
 @Module({

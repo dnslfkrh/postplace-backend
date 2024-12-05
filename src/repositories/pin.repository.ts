@@ -23,7 +23,10 @@ export class PinRepository {
                 latitude: Between(bounds.southWest.latitude, bounds.northEast.latitude),
                 longitude: Between(bounds.southWest.longitude, bounds.northEast.longitude),
             },
-            select: ['id', 'latitude', 'longitude', 'userId', 'title', 'content', 'createdAt']
+            select: ['id', 'latitude', 'longitude','title']
         });
     }
+
+    // 개별적으로 게시물만 보여줄 때
+    // id, userId, title, content, createdAt, createAt(isUpdated) 해서 게시물 정보 보여주기
 }
