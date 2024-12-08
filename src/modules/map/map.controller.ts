@@ -28,4 +28,9 @@ export class MapController {
 
         return await this.mapService.getPins(bounds);
     }
+
+    @Get('get/pin')
+    async getPin(@Query() id: number) {
+        return await this.mapService.findPinById(id);
+    }
 }

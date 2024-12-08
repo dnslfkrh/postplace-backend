@@ -24,4 +24,8 @@ export class MapService {
     async getPins(bounds: BoundsProps): Promise<Pin[]> {
         return await this.pinRepository.findPinsInBounds(bounds);
     }
+
+    async findPinById(id: number): Promise<Pin> {
+        return await this.pinRepository.findPinById(id);
+    }
 }

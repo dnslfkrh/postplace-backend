@@ -13,7 +13,7 @@ export class PinRepository {
 
     async createPin(pinData: Partial<Pin>): Promise<Pin> { // Partial은 일부만 만족 가능
         const pinEntity = this.pinRepository.create(pinData);
-        
+
         return await this.pinRepository.save(pinEntity);
     }
 
@@ -23,10 +23,15 @@ export class PinRepository {
                 latitude: Between(bounds.southWest.latitude, bounds.northEast.latitude),
                 longitude: Between(bounds.southWest.longitude, bounds.northEast.longitude),
             },
-            select: ['id', 'latitude', 'longitude','title']
+            select: ['id', 'latitude', 'longitude', 'title']
         });
     }
 
     // 개별적으로 게시물만 보여줄 때
-    // id, userId, title, content, createdAt, createAt(isUpdated) 해서 게시물 정보 보여주기
+    async findPinById(id: number): Promise<Pin> {
+        return await this.pinRepository.findOne({
+            where: { id },
+            select: ['userId', 'title', 'content', 'createdAt', 'isUpdated']
+        });
+    }
 }
