@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { NewArticleDto } from 'src/modules/map/dto/article.dto';
+import { NewArticleDto } from 'src/modules/map/dto/newPin.dto';
 import { Pin } from 'src/entities/Pin.entity';
 import { PinRepository } from 'src/repositories/pin.repository';
 import { BoundsProps } from 'src/common/types/Props';

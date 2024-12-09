@@ -20,7 +20,7 @@ export class TokenMiddleware implements NestMiddleware {
             const tokens = this.extractTokens(req);
             const decodedToken = await this.processTokens(tokens, res);
 
-            console.log(decodedToken.userID, decodedToken.userEmail);
+            console.log(Date(), "\n사용자 ID:", decodedToken.userID, "\n사용자 Email:",decodedToken.userEmail);
             req['user'] = decodedToken.userID;
 
             next();

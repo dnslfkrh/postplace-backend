@@ -1,9 +1,10 @@
 import { Body, Controller, Get, Post, Query, Req, UsePipes, ValidationPipe } from '@nestjs/common';
 import { MapService } from './map.service';
-import { NewArticleDto } from 'src/modules/map/dto/article.dto';
+import { NewArticleDto } from 'src/modules/map/dto/newPin.dto';
 import { Request } from 'express';
 import { BoundsProps } from 'src/common/types/Props';
 import { BoundsQueryDto } from './dto/boundsQuery.dto';
+import { PinIdDto } from './dto/pinIdQuery.dto';
 
 @Controller('map')
 export class MapController {
@@ -20,17 +21,18 @@ export class MapController {
 
     @Get('get/pins')
     @UsePipes(new ValidationPipe({ transform: true }))
-    async getPins(@Query() boundsDto: BoundsQueryDto) {
+    async getPins(@Query() query: BoundsQueryDto) {
         const bounds: BoundsProps = {
-            northEast: { latitude: boundsDto.neLat, longitude: boundsDto.neLng },
-            southWest: { latitude: boundsDto.swLat, longitude: boundsDto.swLng }
+            northEast: { latitude: query.neLat, longitude: query.neLng },
+            southWest: { latitude: query.swLat, longitude: query.swLng }
         };
 
         return await this.mapService.getPins(bounds);
     }
 
     @Get('get/pin')
-    async getPin(@Query() id: number) {
-        return await this.mapService.findPinById(id);
+    @UsePipes(new ValidationPipe({ transform: true }))
+    async getPin(@Query() query: PinIdDto) {
+        return await this.mapService.findPinById(query.pinId);
     }
 }
