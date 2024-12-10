@@ -10,6 +10,13 @@ export class UserRepository {
         private readonly userRepository: Repository<User>,
     ) { }
 
+    async findUserNameById(id: number): Promise<User | undefined> {
+        return await this.userRepository.findOne({
+            where: { id },
+            select: ['name']
+        });
+    }
+
     async findByEmail(email: string): Promise<User | undefined> {
         return await this.userRepository.findOne({ where: { email } });
     }

@@ -5,6 +5,7 @@ import { MapService } from './map.service';
 import { PinRepository } from 'src/repositories/pin.repository';
 import { Pin } from 'src/entities/Pin.entity';
 import { User } from 'src/entities/User.entity';
+import { UserRepository } from 'src/repositories/user.repository';
 
 @Module({
     imports: [
@@ -13,6 +14,7 @@ import { User } from 'src/entities/User.entity';
     providers: [
         MapService,
         PinRepository,
+        UserRepository,
     ],
     controllers: [
         MapController
@@ -20,6 +22,7 @@ import { User } from 'src/entities/User.entity';
     exports: [
         MapService,
         PinRepository,
+        UserRepository,
     ]
 })
 

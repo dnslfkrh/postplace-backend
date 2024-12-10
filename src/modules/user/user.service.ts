@@ -9,7 +9,7 @@ export class UserService {
         private userRepository: UserRepository,
     ) { }
 
-    async validateUserToJudgmentLoginOrRegister(details: Partial<User>): Promise<User> {
+    async validateUserToJudgmentLoginOrRegister(details: Partial<User>): Promise<User | null> {
         try {
             const { email } = details;
 
@@ -32,7 +32,7 @@ export class UserService {
         }
     }
 
-    async findUserWithIdAndEmail(id: number, email: string): Promise<User | undefined> {
+    async findUserWithIdAndEmail(id: number, email: string): Promise<User | null> {
         const user = await this.userRepository.findByIDAndEmail(id, email);
 
         if (!user) {
@@ -40,5 +40,15 @@ export class UserService {
         }
 
         return user;
+    }
+
+    async findUserNameWithId(id: number): Promise<User | null> {
+        const userName = this.userRepository.findUserNameById(id);
+
+        if (!userName) {
+            throw new Exception(ExceptionCode.USER_NOT_FOUND);
+        }
+
+        return userName;
     }
 }
