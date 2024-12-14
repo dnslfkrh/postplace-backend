@@ -23,9 +23,6 @@ export class Pin {
     @CreateDateColumn()
     createdAt: Date;
 
-    @UpdateDateColumn({ nullable: true })
-    updatedAt: Date;
-
-    @Column({ default: false })
-    isUpdated: boolean;
+    @Column({ type: 'timestamp', nullable: true, default: null })
+    updatedAt: Date | null;
 }

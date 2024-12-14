@@ -3,7 +3,6 @@ export class PinWithUserDto {
     title: string;
     content: string;
     createdAt: Date;
-    isUpdated: boolean;
     updatedAt?: Date;
     userName: string;
 }

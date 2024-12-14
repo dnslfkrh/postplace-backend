@@ -29,27 +29,9 @@ export class PinRepository {
 
     // 개별적으로 게시물만 보여줄 때
     async findPinById(id: number): Promise<Pin | null> {
-        const pin = await this.pinRepository.findOne({
+        return await this.pinRepository.findOne({
             where: { id },
-            select: ['userId', 'title', 'content', 'createdAt', 'isUpdated']
+            select: ['userId', 'title', 'content', 'createdAt', 'updatedAt']
         });
-    
-        if (!pin) {
-            return null;
-        }
-    
-        // 수정된 게시물이면 수정 시간까지 보내줌
-        if (pin.isUpdated) {
-            const updatedPin = await this.pinRepository.findOne({
-                where: { id },
-                select: ['updatedAt']
-            });
-    
-            if (updatedPin && updatedPin.updatedAt) {
-                pin.updatedAt = updatedPin.updatedAt;
-            }
-        }
-    
-        return pin;
     }
 }
