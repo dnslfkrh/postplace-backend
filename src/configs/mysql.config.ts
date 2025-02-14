@@ -13,5 +13,6 @@ export const mysqlConfig: TypeOrmModuleOptions = {
     entities: [
         User,
         Pin,
-    ]
+    ],
+    synchronize: true,
 }
